@@ -3,3 +3,7 @@ dist
 release
 .DS_Store
 *.log
+
+# 실제 서버 주소 등 로컬 설정값. .env.example 참고해서 각자 만들 것.
+.env
+.env.local

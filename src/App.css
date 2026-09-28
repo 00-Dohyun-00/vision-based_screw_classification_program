@@ -68,86 +68,84 @@
   background: #2a1414;
 }
 
-/* ---------- Source bar (camera selection) ---------- */
-.source-bar {
+/* ---------- Judgment banner (OK/NG) ---------- */
+.judgment-banner {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 10px 20px;
-  background: #0f1626;
-  border-bottom: 1px solid #223049;
-  flex-shrink: 0;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 20px 0;
+  padding: 14px 20px;
+  border-radius: 10px;
+  border: 3px solid #2c3b58;
+  background: #131b2b;
+  transition: border-color 0.15s, background 0.15s;
 }
 
-.source-bar-label {
-  font-size: 12px;
+.judgment-label {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
   color: #7c8db0;
-  flex-shrink: 0;
 }
 
-.source-hint {
-  font-size: 11px;
-  color: #6b7a94;
-}
-
-.source-phone-input {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-}
-
-.source-phone-input input {
-  flex: 0 1 260px;
-  padding: 6px 10px;
-  font-size: 12px;
-  border-radius: 6px;
-  border: 1px solid #2c3b58;
-  background: #0e1420;
-  color: #e6ebf2;
-}
-
-.source-phone-input input:focus {
-  outline: none;
-  border-color: #3d6cad;
-}
-
-.source-phone-input button {
-  padding: 6px 14px;
-  font-size: 12px;
+.judgment-preset {
+  font-size: 13px;
   font-weight: 600;
-  border-radius: 6px;
-  border: 1px solid #2a5c3f;
-  background: #12291c;
-  color: #3ddc84;
-  cursor: pointer;
+  color: #9fb0c8;
+  white-space: nowrap;
 }
 
-.source-phone-resolved {
-  font-size: 11px;
-  color: #6b7a94;
+.judgment-preset-spacer {
+  visibility: hidden;
+}
+
+.judgment-banner.ok {
+  border-color: #3ddc84;
+  background: #12291c;
+}
+
+.judgment-banner.ok .judgment-label {
+  color: #3ddc84;
+}
+
+.judgment-banner.ng {
+  border-color: #ff6b6b;
+  background: #2a1414;
+}
+
+.judgment-banner.ng .judgment-label {
+  color: #ff6b6b;
 }
 
 /* ---------- Main layout ---------- */
 .main {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
   padding: 16px;
   min-height: 0;
 }
 
 /* ---------- Video panel ---------- */
+/* 영상이 1024x1024 정사각형으로 온다고 해서, 칸의 가로/세로 중 작은 쪽에 맞춰
+   정사각형을 만든다(container query 단위). 높이 기준으로만 계산하면 창을
+   좁게 줄였을 때 정사각형이 오른쪽 칸을 침범해서 겹치는 문제가 있었음. */
 .video-panel {
+  container-type: size;
+  display: flex;
+  align-items: flex-start; /* 위로 붙임 - 오른쪽 설정 패널과 위쪽이 맞도록 */
+  justify-content: center;
   min-width: 0;
   min-height: 0;
-  display: flex;
 }
 
 .video-frame {
   position: relative;
-  flex: 1;
+  width: min(100cqw, 100cqh);
+  height: min(100cqw, 100cqh);
   background: #000;
   border-radius: 12px;
   overflow: hidden;
@@ -260,4 +258,242 @@
   font-size: 14px;
   font-weight: 700;
   color: #cfe0ff;
+}
+
+/* ---------- Recipe card ---------- */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.recipe-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: #0e1420;
+}
+
+.recipe-code {
+  font-size: 12px;
+  font-weight: 700;
+  color: #cfe0ff;
+}
+
+.recipe-len {
+  flex: 1;
+  font-size: 11px;
+  color: #6b7a94;
+}
+
+.recipe-cell input[type='number'] {
+  width: 56px;
+  padding: 3px 6px;
+  font-size: 12px;
+  border-radius: 5px;
+  border: 1px solid #2c3b58;
+  background: #131b2b;
+  color: #e6ebf2;
+  text-align: right;
+}
+
+/* 위아래 화살표(스핀 버튼)를 숫자와 살짝 떨어뜨림 */
+.recipe-cell input[type='number']::-webkit-inner-spin-button,
+.recipe-cell input[type='number']::-webkit-outer-spin-button {
+  margin-left: 5px;
+}
+
+.recipe-cell input[type='number']:focus {
+  outline: none;
+  border-color: #3d6cad;
+}
+
+.recipe-apply {
+  margin-top: 8px;
+  width: 100%;
+  padding: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 6px;
+  border: 1px solid #2a5c3f;
+  background: #12291c;
+  color: #3ddc84;
+  cursor: pointer;
+}
+
+.recipe-apply:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.recipe-status {
+  margin-top: 6px;
+  font-size: 11px;
+  text-align: center;
+}
+
+.recipe-status.ok {
+  color: #3ddc84;
+}
+
+.recipe-status.error {
+  color: #ff6b6b;
+}
+
+.recipe-presets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #223049;
+}
+
+.preset-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #2c3b58;
+  background: #1c2740;
+  cursor: pointer;
+  text-align: left;
+}
+
+.preset-card:hover {
+  background: #24406b;
+  border-color: #3d6cad;
+}
+
+.preset-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.preset-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #cfe0ff;
+}
+
+.preset-edit-btn {
+  flex-shrink: 0;
+  padding: 0 4px;
+  font-size: 12px;
+  line-height: 1;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #7c8db0;
+  cursor: pointer;
+}
+
+.preset-edit-btn:hover {
+  border-color: #3d6cad;
+  color: #cfe0ff;
+}
+
+.preset-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.preset-chip {
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #0e1420;
+  color: #9fb0c8;
+}
+
+/* ---------- Preset editing ---------- */
+.preset-card-editing {
+  cursor: default;
+  border-color: #3d6cad;
+}
+
+.preset-name-input {
+  padding: 4px 6px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 5px;
+  border: 1px solid #2c3b58;
+  background: #0e1420;
+  color: #cfe0ff;
+}
+
+.preset-name-input:focus {
+  outline: none;
+  border-color: #3d6cad;
+}
+
+.preset-edit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.preset-edit-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 5px;
+  border-radius: 5px;
+  background: #0e1420;
+}
+
+.preset-edit-cell span {
+  flex: 1;
+  font-size: 11px;
+  color: #9fb0c8;
+}
+
+.preset-edit-cell input[type='number'] {
+  width: 40px;
+  padding: 2px 4px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #2c3b58;
+  background: #131b2b;
+  color: #e6ebf2;
+  text-align: right;
+}
+
+.preset-edit-cell input[type='number']:focus {
+  outline: none;
+  border-color: #3d6cad;
+}
+
+.preset-edit-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.preset-edit-actions button {
+  flex: 1;
+  padding: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid #2c3b58;
+  background: #1c2740;
+  color: #cfe0ff;
+  cursor: pointer;
+}
+
+.preset-edit-actions button:first-child {
+  border-color: #2a5c3f;
+  background: #12291c;
+  color: #3ddc84;
+}
+
+.preset-edit-actions button:hover {
+  border-color: #3d6cad;
 }
