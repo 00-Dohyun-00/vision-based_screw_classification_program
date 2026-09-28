@@ -1,11 +1,12 @@
-// 서버 주소는 .env 파일(git에 안 올라감)에서만 읽는다. .env.example 참고.
-// 화면에서 직접 바꾸는 UI는 없앴다 - 주소가 바뀌면 .env 고치고 재빌드/재시작.
-// 영상은 경로 패턴이 아예 달라서(/stream.mjpg) 통째로 따로 저장하고,
-// counts/recipe는 같은 API 베이스 주소에 경로만 붙여서 쓴다.
-export const VIDEO_URL = import.meta.env.VITE_VIDEO_URL
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-export const COUNTS_URL = API_BASE_URL ? `${API_BASE_URL}/counts` : undefined
-export const RECIPE_URL = API_BASE_URL ? `${API_BASE_URL}/recipe` : undefined
+// 비전 서버의 호스트(IP:포트)만 바뀔 수 있는 값으로 취급한다 - 핫스팟/Wi-Fi가
+// 바뀌면 IP가 바뀌니까. 경로(/stream.mjpg, /api/v1/...)는 비전 서버와 확인된
+// 고정 계약이라 사용자가 건드릴 부분이 아니다. 실제 상태 관리는 useServerHost 참고.
+// .env의 값은 "처음 켰을 때의 기본값"일 뿐이고, 화면에서 바꾸면 localStorage에 저장된다.
+export const DEFAULT_SERVER_HOST = import.meta.env.VITE_DEFAULT_SERVER_HOST || ''
+export const HOST_STORAGE_KEY = 'screwvision.serverHost'
+export const VIDEO_PATH = '/stream.mjpg'
+export const API_BASE_PATH = '/api/v1'
+
 export const COUNTS_POLL_MS = 1000
 export const VIDEO_RETRY_MS = 3000 // 영상 스트림이 끊기면 이 간격으로 자동 재시도
 

@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-import { COUNTS_URL, RECIPE_URL, RECIPE_ITEMS, KNOWN_CLASSES, SHOW_TYPE_COUNTS } from './constants'
+import { RECIPE_ITEMS, KNOWN_CLASSES, SHOW_TYPE_COUNTS } from './constants'
 import { normalizeCounts, normalizeJudgment } from './utils/normalize'
 import { matchPreset } from './utils/presets'
 import { useCounts } from './hooks/useCounts'
 import { useRecipe } from './hooks/useRecipe'
 import { usePresets } from './hooks/usePresets'
 import { useVideoStream } from './hooks/useVideoStream'
+import { useServerHost } from './hooks/useServerHost'
 
 import TopBar from './components/TopBar'
+import ServerHostBar from './components/ServerHostBar'
 import JudgmentBanner from './components/JudgmentBanner'
 import VideoPanel from './components/VideoPanel'
 import RecipeCard from './components/RecipeCard'
@@ -21,9 +23,10 @@ import TypeCountsCard from './components/TypeCountsCard'
 // 우리 쪽에서는 카메라도, 박스 그리기도, 중복 카운트 방지도 더 이상 할 필요가 없다.
 // (그건 이제 비전 서버 쪽 책임)
 export default function App() {
-  const video = useVideoStream()
+  const serverHost = useServerHost()
+  const video = useVideoStream(serverHost.urls.video)
 
-  const { data: countsData, status: countsStatus } = useCounts(COUNTS_URL, true)
+  const { data: countsData, status: countsStatus } = useCounts(serverHost.urls.counts, true)
   const { total, byType } = normalizeCounts(countsData)
   const judgment = normalizeJudgment(countsData) // 'ok' | 'ng' | null(아직 판정 없음/연결 안 됨)
 
@@ -33,7 +36,7 @@ export default function App() {
   )
 
   const { saved: savedRecipe, loadStatus: recipeLoadStatus, saveStatus: recipeSaveStatus, save: saveRecipe } =
-    useRecipe(RECIPE_URL)
+    useRecipe(serverHost.urls.recipe)
   const [recipeInputs, setRecipeInputs] = useState({})
   const [activePresetName, setActivePresetName] = useState(null) // 현재 서버에 반영된 값과 일치하는 프리셋 이름
 
@@ -82,13 +85,25 @@ export default function App() {
   return (
     <div className="app">
       <TopBar videoStatus={video.status} countsStatus={countsStatus} />
+      <ServerHostBar
+        input={serverHost.input}
+        onInputChange={serverHost.setInput}
+        onApply={serverHost.apply}
+        onReset={serverHost.reset}
+      />
       <JudgmentBanner judgment={judgment} presetName={activePresetName} />
 
       <main className="main">
-        <VideoPanel reloadTick={video.reloadTick} onLoad={video.onLoad} onError={video.onError} />
+        <VideoPanel
+          videoUrl={serverHost.urls.video}
+          reloadTick={video.reloadTick}
+          onLoad={video.onLoad}
+          onError={video.onError}
+        />
 
         <aside className="data-panel">
           <RecipeCard
+            recipeUrl={serverHost.urls.recipe}
             recipeInputs={recipeInputs}
             onInputChange={setRecipeInput}
             onApplyRecipe={applyRecipe}

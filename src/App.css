@@ -68,6 +68,55 @@
   background: #2a1414;
 }
 
+/* ---------- Server host bar ---------- */
+.server-host-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: #0f1626;
+  border-bottom: 1px solid #223049;
+  flex-shrink: 0;
+}
+
+.server-host-label {
+  font-size: 12px;
+  color: #7c8db0;
+  flex-shrink: 0;
+}
+
+.server-host-bar input {
+  flex: 0 1 260px;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid #2c3b58;
+  background: #0e1420;
+  color: #e6ebf2;
+}
+
+.server-host-bar input:focus {
+  outline: none;
+  border-color: #3d6cad;
+}
+
+.server-host-bar button {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid #2c3b58;
+  background: #1c2740;
+  color: #9fb0c8;
+  cursor: pointer;
+}
+
+.server-host-bar button:first-of-type {
+  border-color: #2a5c3f;
+  background: #12291c;
+  color: #3ddc84;
+}
+
 /* ---------- Judgment banner (OK/NG) ---------- */
 .judgment-banner {
   flex-shrink: 0;
@@ -456,7 +505,7 @@
 }
 
 .preset-edit-cell input[type='number'] {
-  width: 40px;
+  width: 46px;
   padding: 2px 4px;
   font-size: 11px;
   border-radius: 4px;
@@ -469,6 +518,12 @@
 .preset-edit-cell input[type='number']:focus {
   outline: none;
   border-color: #3d6cad;
+}
+
+/* 위아래 화살표(스핀 버튼)를 숫자와 살짝 떨어뜨림 */
+.preset-edit-cell input[type='number']::-webkit-inner-spin-button,
+.preset-edit-cell input[type='number']::-webkit-outer-spin-button {
+  margin-left: 4px;
 }
 
 .preset-edit-actions {

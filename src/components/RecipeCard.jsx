@@ -1,7 +1,8 @@
-import { RECIPE_ITEMS, RECIPE_URL } from '../constants'
+import { RECIPE_ITEMS } from '../constants'
 import PresetGrid from './PresetGrid'
 
 export default function RecipeCard({
+  recipeUrl,
   recipeInputs,
   onInputChange,
   onApplyRecipe,
@@ -36,7 +37,7 @@ export default function RecipeCard({
         ))}
       </div>
 
-      <button className="recipe-apply" onClick={onApplyRecipe} disabled={!RECIPE_URL || saveStatus === 'saving'}>
+      <button className="recipe-apply" onClick={onApplyRecipe} disabled={!recipeUrl || saveStatus === 'saving'}>
         {saveStatus === 'saving' ? '전송 중...' : '확인'}
       </button>
       {saveStatus === 'saved' && <div className="recipe-status ok">서버에 반영됨</div>}
