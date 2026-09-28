@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-import { RECIPE_ITEMS, KNOWN_CLASSES, SHOW_TYPE_COUNTS } from './constants'
-import { normalizeCounts, normalizeJudgment } from './utils/normalize'
-import { matchPreset } from './utils/presets'
-import { useCounts } from './hooks/useCounts'
+import { RECIPE_ITEMS, KNOWN_CLASSES, SHOW_SERVER_HOST_BAR } from './constants'
+import { normalizeCounts, normalizeKitsPossible } from './utils/normalize'
+import { matchPreset, zeroRecipeValues } from './utils/presets'
+import { computeJudgment } from './utils/judgment'
+import { usePolledJson } from './hooks/usePolledJson'
+import { useCluster } from './hooks/useCluster'
 import { useRecipe } from './hooks/useRecipe'
 import { usePresets } from './hooks/usePresets'
 import { useVideoStream } from './hooks/useVideoStream'
@@ -12,10 +14,11 @@ import { useServerHost } from './hooks/useServerHost'
 
 import TopBar from './components/TopBar'
 import ServerHostBar from './components/ServerHostBar'
-import JudgmentBanner from './components/JudgmentBanner'
+import JudgmentDetails from './components/JudgmentDetails'
 import VideoPanel from './components/VideoPanel'
 import RecipeCard from './components/RecipeCard'
 import TypeCountsCard from './components/TypeCountsCard'
+import ClusterCard from './components/ClusterCard'
 
 // 비전 서버가 주는 두 가지:
 //   1) 이미 박스/라벨이 그려진 "완성된 영상" 스트림 (MJPEG 등, <img> 태그로 그냥 띄움)
@@ -26,18 +29,31 @@ export default function App() {
   const serverHost = useServerHost()
   const video = useVideoStream(serverHost.urls.video)
 
-  const { data: countsData, status: countsStatus } = useCounts(serverHost.urls.counts, true)
+  const { data: countsData, status: countsStatus } = usePolledJson(serverHost.urls.counts, true)
   const { total, byType } = normalizeCounts(countsData)
-  const judgment = normalizeJudgment(countsData) // 'ok' | 'ng' | null(아직 판정 없음/연결 안 됨)
 
   const otherCount = Object.entries(byType).reduce(
     (sum, [cls, count]) => sum + (KNOWN_CLASSES.has(cls) ? 0 : count),
     0,
   )
 
+  const { data: kitsData } = usePolledJson(serverHost.urls.kitsPossible, true)
+  const kitsPossible = normalizeKitsPossible(kitsData)
+
+  const { data: clusterData, status: clusterStatus } = useCluster(serverHost.urls.cluster, true)
+  const { byType: clusterByType } = normalizeCounts(clusterData)
+
   const { saved: savedRecipe, loadStatus: recipeLoadStatus, saveStatus: recipeSaveStatus, save: saveRecipe } =
     useRecipe(serverHost.urls.recipe)
-  const [recipeInputs, setRecipeInputs] = useState({})
+
+  // 판정(OK/NG)은 서버가 안 주므로 부품 설정(레시피)과 작업 군집을 직접 비교해서 계산한다.
+  // 레시피를 아직 못 받았거나(recipeLoadStatus !== 'loaded') 군집이 아직 없으면(clusterStatus !== 'open')
+  // 비교할 게 없으니 "판정 대기" 상태(null)로 둔다.
+  const canJudge = recipeLoadStatus === 'loaded' && clusterStatus === 'open'
+  const judgmentResult = canJudge ? computeJudgment(savedRecipe, clusterByType, byType) : null
+  const judgment = judgmentResult ? (judgmentResult.ok ? 'ok' : 'ng') : null
+  // 서버에서 아직 못 받아왔을 때도 빈 칸 대신 0이 보이도록 초기값을 채워둔다.
+  const [recipeInputs, setRecipeInputs] = useState(zeroRecipeValues)
   const [activePresetName, setActivePresetName] = useState(null) // 현재 서버에 반영된 값과 일치하는 프리셋 이름
 
   const presets = usePresets()
@@ -85,13 +101,20 @@ export default function App() {
   return (
     <div className="app">
       <TopBar videoStatus={video.status} countsStatus={countsStatus} />
-      <ServerHostBar
-        input={serverHost.input}
-        onInputChange={serverHost.setInput}
-        onApply={serverHost.apply}
-        onReset={serverHost.reset}
+      {SHOW_SERVER_HOST_BAR && (
+        <ServerHostBar
+          input={serverHost.input}
+          onInputChange={serverHost.setInput}
+          onApply={serverHost.apply}
+          onReset={serverHost.reset}
+        />
+      )}
+      <JudgmentDetails
+        judgment={judgment}
+        toRemove={judgmentResult?.toRemove ?? []}
+        toAddToCluster={judgmentResult?.toAddToCluster ?? []}
+        toRestock={judgmentResult?.toRestock ?? []}
       />
-      <JudgmentBanner judgment={judgment} presetName={activePresetName} />
 
       <main className="main">
         <VideoPanel
@@ -109,6 +132,8 @@ export default function App() {
             onApplyRecipe={applyRecipe}
             saveStatus={recipeSaveStatus}
             loadStatus={recipeLoadStatus}
+            presetName={activePresetName}
+            kitsPossible={kitsPossible}
             presets={presets.presets}
             editingPresetIndex={presets.editingIndex}
             draftPresetName={presets.draftName}
@@ -121,7 +146,10 @@ export default function App() {
             onDraftPresetValueChange={presets.setDraftValue}
           />
 
-          {SHOW_TYPE_COUNTS && <TypeCountsCard total={total} byType={byType} otherCount={otherCount} />}
+          <div className="metric-row">
+            <TypeCountsCard total={total} byType={byType} otherCount={otherCount} />
+            <ClusterCard status={clusterStatus} byType={clusterByType} />
+          </div>
         </aside>
       </main>
     </div>

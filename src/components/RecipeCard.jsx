@@ -8,6 +8,8 @@ export default function RecipeCard({
   onApplyRecipe,
   saveStatus,
   loadStatus,
+  presetName,
+  kitsPossible,
   presets,
   editingPresetIndex,
   draftPresetName,
@@ -19,9 +21,19 @@ export default function RecipeCard({
   onDraftPresetNameChange,
   onDraftPresetValueChange,
 }) {
+  const kitsLabel = kitsPossible === null || kitsPossible === undefined ? '-' : kitsPossible
+
   return (
     <div className="card recipe-card">
-      <h2>부품 설정 (레시피)</h2>
+      <div className="card-header-row">
+        <div className="recipe-header-left">
+          <h2>부품 설정 (레시피)</h2>
+          {presetName && <span className="recipe-preset-tag">{presetName}</span>}
+        </div>
+        <span className="recipe-kits">
+          조립가능 <strong>{kitsLabel}</strong>세트
+        </span>
+      </div>
       <div className="recipe-grid">
         {RECIPE_ITEMS.map(({ code, len }) => (
           <div className="recipe-cell" key={code}>

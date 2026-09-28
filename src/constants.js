@@ -10,8 +10,9 @@ export const API_BASE_PATH = '/api/v1'
 export const COUNTS_POLL_MS = 1000
 export const VIDEO_RETRY_MS = 3000 // 영상 스트림이 끊기면 이 간격으로 자동 재시도
 
-// 팀원 요청으로 "못 종류별 개수" 카드는 일단 숨김. true로 바꾸면 바로 다시 보임.
-export const SHOW_TYPE_COUNTS = false
+// 서버 주소가 이제 안 바뀐다고 해서 입력창은 화면에서 숨김. true로 바꾸면 바로 다시 보임.
+// (훅/기능은 그대로 남아있고 화면에만 안 보이는 것 - .env 기본값으로 계속 동작함)
+export const SHOW_SERVER_HOST_BAR = false
 
 // 못 종류별로 구분되는 색상(양품/불량 같은 의미 없이, 순수하게 종류 구분용).
 export const TYPE_COLORS = ['#5cc8f5', '#3ddc84', '#f5c15c', '#c792ea', '#ff8a65', '#4dd0e1', '#f06292', '#aed581']
@@ -39,4 +40,4 @@ export const KNOWN_CLASSES = new Set(RECIPE_ITEMS.map((item) => item.code))
 // 앱을 처음 켤 때: localStorage에 저장된 게 있으면 그걸 불러오고, 없으면 전부 0으로 시작.
 // 이후 프리셋 카드의 편집(✎) 기능으로 이름/수량을 바꾸면 localStorage에 계속 저장된다.
 export const PRESETS_STORAGE_KEY = 'screwvision.recipePresets'
-export const PRESET_COUNT = 4
+export const PRESET_COUNT = 2 // 화면을 한 눈에 다 보이게 하려고 4 -> 2로 줄임

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
+import { getRecipe, putRecipe } from '../api/visionApi'
 
 // 레시피(못 종류별 목표 개수)를 GET으로 불러오고, PUT으로 전체 교체한다.
-// GET /api/v1/recipe -> { "C28": 0, "S16": 2, ... }
-// PUT /api/v1/recipe (body 동일 형식) -> 전체 레시피 교체
 export function useRecipe(url) {
   const [saved, setSaved] = useState({})
   const [loadStatus, setLoadStatus] = useState('idle') // idle | loading | loaded | error
@@ -15,11 +14,7 @@ export function useRecipe(url) {
     }
     let stopped = false
     setLoadStatus('loading')
-    fetch(url, { cache: 'no-store' })
-      .then((res) => {
-        if (!res.ok) throw new Error(String(res.status))
-        return res.json()
-      })
+    getRecipe(url)
       .then((json) => {
         if (!stopped) {
           setSaved(json && typeof json === 'object' ? json : {})
@@ -38,12 +33,7 @@ export function useRecipe(url) {
     if (!url) return false
     setSaveStatus('saving')
     try {
-      const res = await fetch(url, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(next),
-      })
-      if (!res.ok) throw new Error(String(res.status))
+      await putRecipe(url, next)
       setSaved(next)
       setSaveStatus('saved')
       setTimeout(() => setSaveStatus((s) => (s === 'saved' ? 'idle' : s)), 2000)

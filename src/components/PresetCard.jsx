@@ -69,7 +69,7 @@ export default function PresetCard({
       <div className="preset-values">
         {RECIPE_ITEMS.map(({ code }) => (
           <span className="preset-chip" key={code}>
-            {code}:{preset.values[code] ?? 0}
+            {code}:<span className="preset-chip-value">{preset.values[code] ?? 0}</span>
           </span>
         ))}
       </div>

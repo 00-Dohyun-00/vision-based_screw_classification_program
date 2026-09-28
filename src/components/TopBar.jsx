@@ -13,7 +13,7 @@ export default function TopBar({ videoStatus, countsStatus }) {
       </div>
       <div className="topbar-status">
         <span className={`status-pill ${videoStatus}`}>영상: {videoLabel}</span>
-        <span className={`status-pill ${countsStatus}`}>개수 서버: {countsLabel}</span>
+        <span className={`status-pill ${countsStatus}`}>서버: {countsLabel}</span>
         <span className="clock">{new Date().toLocaleDateString('ko-KR')}</span>
       </div>
     </header>

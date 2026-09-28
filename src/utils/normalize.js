@@ -14,19 +14,13 @@ export function normalizeCounts(raw) {
   return { total, byType }
 }
 
-// 상단 판정 배지(OK/NG)에 쓸 값.
-// TODO: /counts가 /recipe와 같은 순수 {code: 개수} 형태로만 오는 걸로 확인되어,
-// status 같은 필드는 안 온다. 지금은 이 함수가 아무것도 못 찾아 계속 "판정 대기"로
-// 남는다 - OK/NG를 어디서 가져올지(별도 필드 요청 vs 개수/레시피 비교로 직접 계산)
-// 정해지면 이 함수를 그에 맞게 채워야 한다.
-export function normalizeJudgment(raw) {
-  if (!raw || typeof raw !== 'object') return null
-  const v = raw.status ?? raw.judgment ?? raw.result
-  if (typeof v === 'string') {
-    const upper = v.toUpperCase()
-    if (['OK', 'PASS', 'GOOD', '양품'].includes(upper)) return 'ok'
-    if (['NG', 'FAIL', 'BAD', '불량'].includes(upper)) return 'ng'
+// /api/v1/kits-possible 응답: {"kits_possible": 2} 형태로 확인됨.
+// 혹시 몰라 그냥 숫자로 오거나 count/kits/possible 필드로 와도 인식하게 유연하게 짰다.
+export function normalizeKitsPossible(raw) {
+  if (typeof raw === 'number') return raw
+  if (raw && typeof raw === 'object') {
+    const v = raw.kits_possible ?? raw.count ?? raw.kits ?? raw.possible ?? raw.value
+    if (typeof v === 'number') return v
   }
-  if (typeof raw.ok === 'boolean') return raw.ok ? 'ok' : 'ng'
   return null
 }

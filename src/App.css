@@ -117,55 +117,99 @@
   color: #3ddc84;
 }
 
-/* ---------- Judgment banner (OK/NG) ---------- */
-.judgment-banner {
+/* ---------- Judgment details (상단 상태 줄: OK/NG + 3가지 목록) ---------- */
+.judgment-details {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
-  margin: 12px 20px 0;
-  padding: 14px 20px;
+  margin: 8px 20px 0;
+  padding: 8px 14px;
   border-radius: 10px;
-  border: 3px solid #2c3b58;
+  border: 2px solid #2c3b58;
   background: #131b2b;
   transition: border-color 0.15s, background 0.15s;
 }
 
-.judgment-label {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  color: #7c8db0;
-}
-
-.judgment-preset {
-  font-size: 13px;
-  font-weight: 600;
-  color: #9fb0c8;
-  white-space: nowrap;
-}
-
-.judgment-preset-spacer {
-  visibility: hidden;
-}
-
-.judgment-banner.ok {
+.judgment-details.ok {
   border-color: #3ddc84;
   background: #12291c;
 }
 
-.judgment-banner.ok .judgment-label {
+.judgment-details.ok .judgment-details-status {
   color: #3ddc84;
 }
 
-.judgment-banner.ng {
+.judgment-details.ng {
   border-color: #ff6b6b;
   background: #2a1414;
 }
 
-.judgment-banner.ng .judgment-label {
+.judgment-details.ng .judgment-details-status {
   color: #ff6b6b;
+}
+
+.judgment-details-status {
+  flex-shrink: 0;
+  min-width: 64px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #7c8db0;
+}
+
+/* 3가지 목록(제거/추가/트레이에 추가)을 하나로 묶어서 가운데 정렬 */
+.judgment-detail-list {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  min-width: 0;
+}
+
+/* 칩 4개(코드+개수)까지는 줄바꿈 없이 한 줄에 들어가도록 넉넉한 폭을 준다. */
+.judgment-detail-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 300px;
+  flex-shrink: 0;
+}
+
+.judgment-detail-title {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  color: #7c8db0;
+  white-space: nowrap;
+}
+
+.judgment-detail-chips {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  gap: 4px;
+}
+
+.judgment-detail-chip {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #0e1420;
+}
+
+.judgment-detail-group.remove .judgment-detail-chip {
+  color: #ff6b6b;
+}
+
+.judgment-detail-group.add .judgment-detail-chip {
+  color: #5cc8f5;
+}
+
+.judgment-detail-group.restock .judgment-detail-chip {
+  color: #f5c15c;
 }
 
 /* ---------- Main layout ---------- */
@@ -246,70 +290,128 @@
   text-transform: uppercase;
 }
 
-.type-total {
-  font-size: 13px;
-  color: #9fb0c8;
-  margin-bottom: 10px;
-}
-
-.type-total strong {
-  font-size: 18px;
-  color: #e6ebf2;
-}
-
-.type-group {
+/* 제목과 우측 요약값(예: 총 개수)을 한 줄에 나란히 놓을 때 씀 */
+.card-header-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   margin-bottom: 12px;
 }
 
-.type-group:last-child {
+.card-header-row h2 {
   margin-bottom: 0;
 }
 
-.type-group-title {
-  font-size: 11px;
-  font-weight: 700;
-  color: #7c8db0;
-  margin-bottom: 6px;
+.type-total {
+  font-size: 12px;
+  color: #9fb0c8;
 }
 
-.type-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.cluster-empty {
+  font-size: 12px;
+  color: #6b7a94;
+  text-align: center;
+  padding: 12px 0;
 }
 
-.type-list li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  border-radius: 6px;
-  background: #0e1420;
-}
-
-.type-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.type-name {
-  flex: 1;
-  font-size: 13px;
+.type-total strong {
+  font-size: 15px;
   color: #e6ebf2;
 }
 
-.type-count {
-  font-size: 14px;
+/* 못 종류별 개수 / 작업 군집 카드를 나란히 배치 */
+.metric-row {
+  display: flex;
+  gap: 16px;
+}
+
+.metric-row .card {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 종류별 개수를 2x4 표(스탯 타일)로 크고 또렷하게 보여준다. */
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.metric-cell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 7px 4px;
+  border-radius: 7px;
+  background: #0e1420;
+  border: 1px solid #1c2740;
+}
+
+.metric-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.metric-code {
+  font-size: 10px;
   font-weight: 700;
-  color: #cfe0ff;
+  color: #9fb0c8;
+}
+
+.metric-value {
+  font-size: 15px;
+  font-weight: 800;
+  color: #e6ebf2;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-unit {
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7a94;
+}
+
+.metric-extra {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #6b7a94;
+  text-align: center;
 }
 
 /* ---------- Recipe card ---------- */
+.recipe-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.recipe-preset-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #5cc8f5;
+  background: #10283a;
+  border: 1px solid #1f4a63;
+  padding: 2px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.recipe-kits {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: #9fb0c8;
+  white-space: nowrap;
+}
+
+.recipe-kits strong {
+  font-size: 15px;
+  color: #e6ebf2;
+}
+
 .recipe-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -449,17 +551,24 @@
 }
 
 .preset-values {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 3px;
 }
 
 .preset-chip {
   font-size: 12px;
-  padding: 2px 6px;
+  padding: 2px 4px;
   border-radius: 4px;
   background: #0e1420;
   color: #9fb0c8;
+  text-align: center;
+}
+
+.preset-chip-value {
+  padding-left: 4px;
+  color: #cfe0ff;
+  font-weight: 700;
 }
 
 /* ---------- Preset editing ---------- */

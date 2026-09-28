@@ -20,7 +20,9 @@ export function loadPresets() {
     const raw = localStorage.getItem(PRESETS_STORAGE_KEY)
     if (raw) {
       const parsed = JSON.parse(raw)
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed
+      // PRESET_COUNT를 나중에 줄였는데 예전에 더 많이 저장해뒀던 경우, 그 개수만큼
+      // 잘라서 쓴다 (localStorage에 더 많은 데이터가 있어도 2개만 표시).
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed.slice(0, PRESET_COUNT)
     }
   } catch {
     /* ignore */
