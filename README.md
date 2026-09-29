@@ -7,6 +7,8 @@
 비전 서버가 인식한 못(나사) 영상과 개수를 보여주고, 레시피(부품 설정)를 관리하는
 데스크톱 앱. React(Vite) + Electron으로 만들었습니다.
 
+비전 서버 개발 협업 : https://github.com/LeeMin-hyeong/realtime-nail-classification
+
 ## 기술 스택
 
 - **React 18** — UI
@@ -67,8 +69,6 @@ src/
 ```
 
 ## 비전 서버 계약
-
-비전 서버 개발 협업 : https://github.com/LeeMin-hyeong/realtime-nail-classification
 
 - `GET /stream.mjpg` — 박스/라벨 그려진 완성 영상 (MJPEG)
 - `GET /api/v1/counts` — 트레이 전체 종류별 개수, `GET /api/v1/cluster` — 작업 군집
