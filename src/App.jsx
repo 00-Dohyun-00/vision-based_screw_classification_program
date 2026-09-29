@@ -66,9 +66,12 @@ export default function App() {
       draft[code] = String(savedRecipe[code] ?? 0)
     })
     setRecipeInputs(draft)
-    setActivePresetName(matchPreset(savedRecipe, presets.presets))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recipeLoadStatus, savedRecipe])
+
+  useEffect(() => {
+    if (recipeLoadStatus !== 'loaded') return
+    setActivePresetName(matchPreset(savedRecipe, presets.presets))
+  }, [recipeLoadStatus, savedRecipe, presets.presets])
 
   function setRecipeInput(code, value) {
     setRecipeInputs((prev) => ({ ...prev, [code]: value }))
@@ -150,6 +153,7 @@ export default function App() {
             onSaveEditPreset={presets.saveEdit}
             onDraftPresetNameChange={presets.setDraftName}
             onDraftPresetValueChange={presets.setDraftValue}
+            onResetPresetDraft={presets.resetDraftPreset}
           />
 
           <div className="metric-row">

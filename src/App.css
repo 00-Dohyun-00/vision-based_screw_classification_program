@@ -546,8 +546,24 @@
   grid-template-columns: 1fr 1fr;
   gap: 6px;
   margin-top: 10px;
-  padding-top: 10px;
+  padding-top: 8px;
   border-top: 1px solid #223049;
+}
+
+.preset-reset-btn {
+  flex-shrink: 0;
+  padding: 3px 7px;
+  font-size: 11px;
+  border-radius: 5px;
+  border: 1px solid #2c3b58;
+  background: #1c2740;
+  color: #9fb0c8;
+  cursor: pointer;
+}
+
+.preset-reset-btn:hover {
+  border-color: #3d6cad;
+  color: #cfe0ff;
 }
 
 .preset-card {
@@ -626,6 +642,8 @@
 }
 
 .preset-name-input {
+  flex: 1;
+  min-width: 0;
   padding: 4px 6px;
   font-size: 12px;
   font-weight: 700;

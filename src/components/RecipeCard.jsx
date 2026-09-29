@@ -22,6 +22,7 @@ export default function RecipeCard({
   onSaveEditPreset,
   onDraftPresetNameChange,
   onDraftPresetValueChange,
+  onResetPresetDraft,
 }) {
   const kitsLabel = kitsPossible === null || kitsPossible === undefined ? '-' : kitsPossible
 
@@ -75,6 +76,7 @@ export default function RecipeCard({
         onSaveEdit={onSaveEditPreset}
         onDraftNameChange={onDraftPresetNameChange}
         onDraftValueChange={onDraftPresetValueChange}
+        onResetDraft={onResetPresetDraft}
       />
     </div>
   )

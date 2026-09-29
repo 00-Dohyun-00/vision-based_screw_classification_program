@@ -15,17 +15,23 @@ export default function PresetCard({
   onSaveEdit,
   onDraftNameChange,
   onDraftValueChange,
+  onResetDraft,
 }) {
   if (isEditing) {
     return (
       <div className="preset-card preset-card-editing">
-        <input
-          type="text"
-          className="preset-name-input"
-          value={draftName}
-          onChange={(e) => onDraftNameChange(e.target.value)}
-          placeholder={`프리셋 ${index + 1}`}
-        />
+        <div className="preset-header">
+          <input
+            type="text"
+            className="preset-name-input"
+            value={draftName}
+            onChange={(e) => onDraftNameChange(e.target.value)}
+            placeholder={`프리셋 ${index + 1}`}
+          />
+          <button type="button" className="preset-reset-btn" onClick={onResetDraft}>
+            초기화
+          </button>
+        </div>
         <div className="preset-edit-grid">
           {RECIPE_ITEMS.map(({ code }) => (
             <div className="preset-edit-cell" key={code}>
