@@ -6,6 +6,7 @@ export default function RecipeCard({
   recipeInputs,
   onInputChange,
   onApplyRecipe,
+  onResetRecipe,
   saveStatus,
   loadStatus,
   presetName,
@@ -49,9 +50,14 @@ export default function RecipeCard({
         ))}
       </div>
 
-      <button className="recipe-apply" onClick={onApplyRecipe} disabled={!recipeUrl || saveStatus === 'saving'}>
-        {saveStatus === 'saving' ? '전송 중...' : '확인'}
-      </button>
+      <div className="recipe-actions">
+        <button className="recipe-apply" onClick={onApplyRecipe} disabled={!recipeUrl || saveStatus === 'saving'}>
+          {saveStatus === 'saving' ? '전송 중...' : '확인'}
+        </button>
+        <button type="button" className="recipe-reset" onClick={onResetRecipe}>
+          초기화
+        </button>
+      </div>
       {saveStatus === 'saved' && <div className="recipe-status ok">서버에 반영됨</div>}
       {saveStatus === 'error' && <div className="recipe-status error">전송 실패</div>}
       {loadStatus === 'error' && (

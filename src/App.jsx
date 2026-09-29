@@ -93,6 +93,11 @@ export default function App() {
     setRecipeInputs(draft)
   }
 
+  // 입력창만 전부 0으로 되돌린다 - 서버 전송은 "확인"을 눌러야 일어난다.
+  function resetRecipeInputs() {
+    setRecipeInputs(zeroRecipeValues())
+  }
+
   // index.html의 부팅 로딩 화면은 React가 실제로 화면을 그린 뒤에 지운다.
   useEffect(() => {
     document.getElementById('boot-loading')?.remove()
@@ -130,6 +135,7 @@ export default function App() {
             recipeInputs={recipeInputs}
             onInputChange={setRecipeInput}
             onApplyRecipe={applyRecipe}
+            onResetRecipe={resetRecipeInputs}
             saveStatus={recipeSaveStatus}
             loadStatus={recipeLoadStatus}
             presetName={activePresetName}
