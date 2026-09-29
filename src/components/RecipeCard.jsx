@@ -1,5 +1,6 @@
 import { RECIPE_ITEMS } from '../constants'
 import PresetGrid from './PresetGrid'
+import QuantityInput from './QuantityInput'
 
 export default function RecipeCard({
   recipeUrl,
@@ -40,11 +41,10 @@ export default function RecipeCard({
           <div className="recipe-cell" key={code}>
             <span className="recipe-code">{code}</span>
             <span className="recipe-len">{len}</span>
-            <input
-              type="number"
-              min="0"
+            <QuantityInput
+              label={code}
               value={recipeInputs[code] ?? ''}
-              onChange={(e) => onInputChange(code, e.target.value)}
+              onChange={(value) => onInputChange(code, value)}
             />
           </div>
         ))}

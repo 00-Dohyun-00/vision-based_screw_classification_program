@@ -1,4 +1,5 @@
 import { RECIPE_ITEMS } from '../constants'
+import QuantityInput from './QuantityInput'
 
 // 프리셋 카드 하나. 평소엔 이름+값 미리보기를 보여주고 클릭하면 레시피 입력창에 적용,
 // ✎ 누르면 편집 모드(이름/값 직접 수정 + 저장/취소)로 바뀐다.
@@ -27,15 +28,14 @@ export default function PresetCard({
         />
         <div className="preset-edit-grid">
           {RECIPE_ITEMS.map(({ code }) => (
-            <label className="preset-edit-cell" key={code}>
+            <div className="preset-edit-cell" key={code}>
               <span>{code}</span>
-              <input
-                type="number"
-                min="0"
+              <QuantityInput
+                label={`${draftName || preset.name} ${code}`}
                 value={draftValues[code] ?? ''}
-                onChange={(e) => onDraftValueChange(code, e.target.value)}
+                onChange={(value) => onDraftValueChange(code, value)}
               />
-            </label>
+            </div>
           ))}
         </div>
         <div className="preset-edit-actions">

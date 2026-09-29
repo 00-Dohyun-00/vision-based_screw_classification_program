@@ -439,26 +439,52 @@
   color: #6b7a94;
 }
 
-.recipe-cell input[type='number'] {
-  width: 56px;
-  padding: 3px 6px;
+.quantity-input {
+  display: flex;
+  align-items: stretch;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.quantity-input input[type='number'] {
+  width: 38px;
+  min-width: 0;
+  padding: 3px 2px;
   font-size: 12px;
   border-radius: 5px;
   border: 1px solid #2c3b58;
   background: #131b2b;
   color: #e6ebf2;
-  text-align: right;
+  text-align: center;
+  appearance: textfield;
 }
 
-/* 위아래 화살표(스핀 버튼)를 숫자와 살짝 떨어뜨림 */
-.recipe-cell input[type='number']::-webkit-inner-spin-button,
-.recipe-cell input[type='number']::-webkit-outer-spin-button {
-  margin-left: 5px;
+.quantity-input input[type='number']::-webkit-inner-spin-button,
+.quantity-input input[type='number']::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
 }
 
-.recipe-cell input[type='number']:focus {
+.quantity-input input[type='number']:focus {
   outline: none;
   border-color: #3d6cad;
+}
+
+.quantity-input button {
+  width: 24px;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 5px;
+  border: 1px solid #2c3b58;
+  background: #1c2740;
+  color: #cfe0ff;
+  cursor: pointer;
+}
+
+.quantity-input button:hover {
+  border-color: #3d6cad;
+  background: #24406b;
 }
 
 .recipe-actions {
@@ -635,26 +661,19 @@
   color: #9fb0c8;
 }
 
-.preset-edit-cell input[type='number'] {
-  width: 46px;
-  padding: 2px 4px;
+.preset-edit-cell .quantity-input {
+  gap: 2px;
+}
+
+.preset-edit-cell .quantity-input button {
+  width: 19px;
+  font-size: 12px;
+}
+
+.preset-edit-cell .quantity-input input[type='number'] {
+  width: 26px;
+  padding: 2px 1px;
   font-size: 11px;
-  border-radius: 4px;
-  border: 1px solid #2c3b58;
-  background: #131b2b;
-  color: #e6ebf2;
-  text-align: right;
-}
-
-.preset-edit-cell input[type='number']:focus {
-  outline: none;
-  border-color: #3d6cad;
-}
-
-/* 위아래 화살표(스핀 버튼)를 숫자와 살짝 떨어뜨림 */
-.preset-edit-cell input[type='number']::-webkit-inner-spin-button,
-.preset-edit-cell input[type='number']::-webkit-outer-spin-button {
-  margin-left: 4px;
 }
 
 .preset-edit-actions {
