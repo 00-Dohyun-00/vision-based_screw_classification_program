@@ -68,6 +68,8 @@ src/
 
 ## 비전 서버 계약
 
+비전 서버 개발 협업 : https://github.com/LeeMin-hyeong/realtime-nail-classification
+
 - `GET /stream.mjpg` — 박스/라벨 그려진 완성 영상 (MJPEG)
 - `GET /api/v1/counts` — 트레이 전체 종류별 개수, `GET /api/v1/cluster` — 작업 군집
   종류별 개수 (군집 없으면 204)
