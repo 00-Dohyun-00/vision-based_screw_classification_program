@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { RECIPE_ITEMS } from '../constants'
 import { loadPresets, savePresets } from '../utils/presets'
 
-// 프리셋 4개의 값과, 편집 모드(어느 카드가 지금 편집 중인지 + 입력 중인 초안 값)를 관리한다.
+// 프리셋 값과, 편집 모드(어느 카드가 지금 편집 중인지 + 입력 중인 초안 값)를 관리한다.
 export function usePresets() {
   const [presets, setPresets] = useState(() => loadPresets())
   const [editingIndex, setEditingIndex] = useState(null) // null | 0~3
@@ -42,6 +42,12 @@ export function usePresets() {
     setEditingIndex(null)
   }
 
+  function resetDraftPreset() {
+    if (editingIndex === null) return
+    setDraftName(`프리셋 ${editingIndex + 1}`)
+    setDraftValues(Object.fromEntries(RECIPE_ITEMS.map(({ code }) => [code, '0'])))
+  }
+
   return {
     presets,
     editingIndex,
@@ -52,5 +58,6 @@ export function usePresets() {
     startEdit,
     cancelEdit,
     saveEdit,
+    resetDraftPreset,
   }
 }

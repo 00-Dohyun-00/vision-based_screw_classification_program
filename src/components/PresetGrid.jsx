@@ -11,6 +11,7 @@ export default function PresetGrid({
   onSaveEdit,
   onDraftNameChange,
   onDraftValueChange,
+  onResetDraft,
 }) {
   return (
     <div className="recipe-presets">
@@ -28,6 +29,7 @@ export default function PresetGrid({
           onSaveEdit={onSaveEdit}
           onDraftNameChange={onDraftNameChange}
           onDraftValueChange={onDraftValueChange}
+          onResetDraft={onResetDraft}
         />
       ))}
     </div>

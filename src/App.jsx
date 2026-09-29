@@ -27,9 +27,8 @@ import ClusterCard from './components/ClusterCard'
 // (그건 이제 비전 서버 쪽 책임)
 export default function App() {
   const serverHost = useServerHost()
-  const video = useVideoStream(serverHost.urls.video)
-
   const { data: countsData, status: countsStatus } = usePolledJson(serverHost.urls.counts, true)
+  const video = useVideoStream(serverHost.urls.video)
   const { total, byType } = normalizeCounts(countsData)
 
   const otherCount = Object.entries(byType).reduce(
@@ -66,9 +65,12 @@ export default function App() {
       draft[code] = String(savedRecipe[code] ?? 0)
     })
     setRecipeInputs(draft)
-    setActivePresetName(matchPreset(savedRecipe, presets.presets))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recipeLoadStatus, savedRecipe])
+
+  useEffect(() => {
+    if (recipeLoadStatus !== 'loaded') return
+    setActivePresetName(matchPreset(savedRecipe, presets.presets))
+  }, [recipeLoadStatus, savedRecipe, presets.presets])
 
   function setRecipeInput(code, value) {
     setRecipeInputs((prev) => ({ ...prev, [code]: value }))
@@ -105,7 +107,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <TopBar videoStatus={video.status} countsStatus={countsStatus} />
+      <TopBar countsStatus={countsStatus} />
       {SHOW_SERVER_HOST_BAR && (
         <ServerHostBar
           input={serverHost.input}
@@ -124,6 +126,7 @@ export default function App() {
       <main className="main">
         <VideoPanel
           videoUrl={serverHost.urls.video}
+          serverStatus={countsStatus}
           reloadTick={video.reloadTick}
           onLoad={video.onLoad}
           onError={video.onError}
@@ -150,6 +153,7 @@ export default function App() {
             onSaveEditPreset={presets.saveEdit}
             onDraftPresetNameChange={presets.setDraftName}
             onDraftPresetValueChange={presets.setDraftValue}
+            onResetPresetDraft={presets.resetDraftPreset}
           />
 
           <div className="metric-row">
